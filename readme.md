@@ -614,6 +614,38 @@ brew install aionui
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## 🛠️ Development Setup
+
+### Prerequisites
+
+![Node.js](https://img.shields.io/badge/node-%3E%3D22%20%3C25-339933?style=flat-square&logo=node.js&logoColor=white)
+![Bun](https://img.shields.io/badge/bun-required-F9F1E1?style=flat-square&logo=bun&logoColor=black)
+
+### Build from Source
+
+```bash
+git clone https://github.com/iOfficeAI/AionUi.git
+cd AionUi
+bun install
+```
+
+### Run in Development
+
+```bash
+bun run start
+```
+
+### Quality Checks
+
+```bash
+# Tests
+bun run test
+
+# Lint and format
+bun run lint
+bun run format:check
+```
+
 ---
 
 ## License
