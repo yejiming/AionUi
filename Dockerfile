@@ -13,7 +13,7 @@ COPY . .
 
 # Build renderer (no Electron needed) and server bundle
 RUN bun run build:renderer:web
-RUN node scripts/build-server.mjs
+RUN node scripts/build/build-server.mjs
 
 # ---- Runtime image ----
 FROM oven/bun:latest AS runtime

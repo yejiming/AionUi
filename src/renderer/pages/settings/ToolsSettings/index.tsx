@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import ToolsModalContent from '@/renderer/components/settings/SettingsModal/contents/ToolsModalContent';
+import ToolsModalContent from '@/renderer/components/settings/SettingsModal/contents/tools/ToolsModalContent';
 import SettingsPageWrapper from '../components/SettingsPageWrapper';
 
 const ToolsSettings: React.FC = () => {

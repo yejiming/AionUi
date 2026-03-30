@@ -177,17 +177,17 @@ build: preflight
 # Quick build - uses cached Vite output if available
 build-quick: preflight
     $env:NODE_OPTIONS = "--max-old-space-size=8192"; \
-    node scripts/build-with-builder.js auto --skip-native
+    node scripts/build/build-with-builder.js auto --skip-native
 
 # Build package only (no installer) - fastest iteration
 build-package: preflight
     $env:NODE_OPTIONS = "--max-old-space-size=8192"; \
-    node scripts/build-with-builder.js auto --pack-only --skip-native
+    node scripts/build/build-with-builder.js auto --pack-only --skip-native
 
 # Force full rebuild (clears cache)
 build-force: preflight clean
     $env:NODE_OPTIONS = "--max-old-space-size=8192"; \
-    node scripts/build-with-builder.js auto --force
+    node scripts/build/build-with-builder.js auto --force
 
 # Build for Windows x64
 build-win-x64: preflight
@@ -202,7 +202,7 @@ build-win-x64: preflight
     $env:npm_config_build_from_source = "true"; \
     $env:MSVS_VERSION = "2022"; \
     $env:GYP_MSVS_VERSION = "2022"; \
-    node scripts/build-with-builder.js x64 --win --x64
+    node scripts/build/build-with-builder.js x64 --win --x64
 
 # Build for Windows arm64
 build-win-arm64: preflight
@@ -217,7 +217,7 @@ build-win-arm64: preflight
     $env:npm_config_build_from_source = "true"; \
     $env:MSVS_VERSION = "2022"; \
     $env:GYP_MSVS_VERSION = "2022"; \
-    node scripts/build-with-builder.js arm64 --win --arm64
+    node scripts/build/build-with-builder.js arm64 --win --arm64
 
 # Build for Windows (auto-detect arch)
 build-win: preflight
@@ -239,7 +239,7 @@ build-mac-arm64: preflight
     $env:npm_config_runtime = "electron"; \
     $env:npm_config_target = (node -p "require('./package.json').devDependencies.electron.replace(/[\^~]/g, '')" 2>&1).Trim(); \
     $env:npm_config_disturl = "https://electronjs.org/headers"; \
-    node scripts/build-with-builder.js arm64 --mac --arm64
+    node scripts/build/build-with-builder.js arm64 --mac --arm64
 
 # Build for macOS x64
 build-mac-x64: preflight
@@ -249,7 +249,7 @@ build-mac-x64: preflight
     $env:npm_config_runtime = "electron"; \
     $env:npm_config_target = (node -p "require('./package.json').devDependencies.electron.replace(/[\^~]/g, '')" 2>&1).Trim(); \
     $env:npm_config_disturl = "https://electronjs.org/headers"; \
-    node scripts/build-with-builder.js x64 --mac --x64
+    node scripts/build/build-with-builder.js x64 --mac --x64
 
 # Build for macOS (arm64 + x64)
 build-mac: preflight
@@ -361,28 +361,28 @@ e2e-report:
 # Start dev server with example extensions loaded
 # CDP remote debugging is enabled by default on port 9222 in dev mode
 dev-ext:
-    node scripts/dev-bootstrap.mjs launch start --extensions
+    node scripts/dev/dev-bootstrap.mjs launch start --extensions
 
 # Start WebUI with example extensions loaded
 webui-ext:
-    node scripts/dev-bootstrap.mjs launch webui --extensions
+    node scripts/dev/dev-bootstrap.mjs launch webui --extensions
 
 # Start CLI with example extensions loaded
 cli-ext:
-    node scripts/dev-bootstrap.mjs launch cli --extensions
+    node scripts/dev/dev-bootstrap.mjs launch cli --extensions
 
 # Cross-platform diagnosis for dev extension startup
 dev-ext-doctor:
-    node scripts/dev-bootstrap.mjs doctor
+    node scripts/dev/dev-bootstrap.mjs doctor
 
 # Launch packaged (unpacked) app with example extensions for one-click debugging
 # Requires out/*-unpacked artifacts
 packaged-ext:
-    node scripts/packaged-launch.mjs
+    node scripts/release/packaged-launch.mjs
 
 # Build package first, then launch with example extensions
 packaged-ext-build: build-package
-    node scripts/packaged-launch.mjs
+    node scripts/release/packaged-launch.mjs
 
 # Validate extension system types compile correctly
 ext-typecheck:

@@ -123,7 +123,7 @@ Match the module to the feature area. If no module fits, consider whether a new 
 - [ ] `zh-TW/<module>.json` — added
 - [ ] Any other language listed in `src/common/config/i18n-config.json` → `supportedLanguages` — added
 
-A key missing from even one locale will cause `node scripts/check-i18n.js` to fail in CI.
+A key missing from even one locale will cause `node scripts/i18n/check-i18n.js` to fail in CI.
 
 ### Step 5: Use in Component
 
@@ -142,7 +142,7 @@ Run these two commands **in order** — both must pass before committing:
 
 ```bash
 bun run i18n:types          # Step A: regenerate i18n-keys.d.ts from reference locale
-node scripts/check-i18n.js  # Step B: validate structure, keys, and type sync
+node scripts/i18n/check-i18n.js  # Step B: validate structure, keys, and type sync
 ```
 
 - `i18n:types` must be run **before** `check-i18n.js` — the check validates the generated file
@@ -156,7 +156,7 @@ node scripts/check-i18n.js  # Step B: validate structure, keys, and type sync
 2. Create `<module>.json` in **every** locale directory (read `supportedLanguages` to know which)
 3. Add import + export in each locale's `index.ts`
 4. Run `bun run i18n:types` to regenerate type definitions
-5. Run `node scripts/check-i18n.js` to validate
+5. Run `node scripts/i18n/check-i18n.js` to validate
 
 ## Hardcoded String Detection
 
@@ -230,7 +230,7 @@ Before submitting code with new text:
 - [ ] No hardcoded Chinese/English in JSX
 - [ ] zh-TW reviewed for term differences
 - [ ] `bun run i18n:types` ran first (regenerates `i18n-keys.d.ts`)
-- [ ] `node scripts/check-i18n.js` passed after types regenerated (no errors)
+- [ ] `node scripts/i18n/check-i18n.js` passed after types regenerated (no errors)
 
 ## Common Mistakes
 

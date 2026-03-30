@@ -2,7 +2,7 @@
 name: pr-automation
 description: |
   PR Automation Orchestrator: poll open PRs, check CI, run review, fix, and merge eligible PRs.
-  Use when: (1) Invoked by daemon via scripts/pr-automation.sh, (2) User says "/pr-automation".
+  Use when: (1) Invoked by daemon via scripts/ops/pr-automation.sh, (2) User says "/pr-automation".
 ---
 
 # PR Automation
@@ -19,7 +19,7 @@ Pure skips continue within the same session to find the next eligible PR.
 /pr-automation
 ```
 
-No arguments required. The daemon script `scripts/pr-automation.sh` manages the automation loop.
+No arguments required. The daemon script `scripts/ops/pr-automation.sh` manages the automation loop.
 
 ## Configuration
 

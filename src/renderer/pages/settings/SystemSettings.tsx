@@ -7,7 +7,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import SystemModalContent from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent';
-import AboutModalContent from '@/renderer/components/settings/SettingsModal/contents/AboutModalContent';
+import AboutModalContent from '@/renderer/components/settings/SettingsModal/contents/general/AboutModalContent';
 import SettingsPageWrapper from './components/SettingsPageWrapper';
 
 const SystemSettings: React.FC = () => {

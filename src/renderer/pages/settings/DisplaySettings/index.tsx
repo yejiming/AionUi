@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import DisplayModalContent from '@/renderer/components/settings/SettingsModal/contents/DisplayModalContent';
+import DisplayModalContent from '@/renderer/components/settings/SettingsModal/contents/general/DisplayModalContent';
 import SettingsPageWrapper from '../components/SettingsPageWrapper';
 
 const DisplaySettings: React.FC = () => {

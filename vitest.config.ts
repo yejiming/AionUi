@@ -54,7 +54,7 @@ export default defineConfig({
       // Cover ALL source code by default — new files are automatically included.
       // Only exclude files that genuinely cannot be unit-tested (entry points,
       // type-only files, static assets, etc.).
-      include: ['src/**/*.{ts,tsx}', 'scripts/prepareBundledBun.js'],
+      include: ['src/**/*.{ts,tsx}', 'scripts/build/prepareBundledBun.js'],
       exclude: [
         // Type declaration files (no runtime code)
         'src/**/*.d.ts',

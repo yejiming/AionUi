@@ -247,7 +247,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node scripts/check-i18n.js 2>&1 | tee i18n-check.log
+          node scripts/i18n/check-i18n.js 2>&1 | tee i18n-check.log
 
       - name: Publish i18n summary
         if: always()
@@ -424,7 +424,7 @@ jobs:
           echo "=========================================="
           echo "BUILD TEST: ${{ matrix.platform }}"
           echo "=========================================="
-          node scripts/build-with-builder.js auto ${{ matrix.build_args }}
+          node scripts/build/build-with-builder.js auto ${{ matrix.build_args }}
           echo "✓Build test passed for ${{ matrix.platform }}"
         env:
           NODE_OPTIONS: '--max-old-space-size=8192'
@@ -562,12 +562,12 @@ jobs:
 
       - name: Create mock build artifacts
         shell: bash
-        run: bash scripts/create-mock-release-artifacts.sh build-artifacts
+        run: bash scripts/release/create-mock-release-artifacts.sh build-artifacts
 
       - name: Run prepare-release-assets script
         shell: bash
-        run: bash scripts/prepare-release-assets.sh build-artifacts release-assets
+        run: bash scripts/release/prepare-release-assets.sh build-artifacts release-assets
 
       - name: Validate script output
         shell: bash
-        run: bash scripts/verify-release-assets.sh release-assets
+        run: bash scripts/release/verify-release-assets.sh release-assets

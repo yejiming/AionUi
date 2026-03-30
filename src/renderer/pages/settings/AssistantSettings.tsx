@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import AssistantModalContent from '@/renderer/components/settings/SettingsModal/contents/AssistantModalContent';
+import AssistantModalContent from '@/renderer/components/settings/SettingsModal/contents/agents/AssistantModalContent';
 import SettingsPageWrapper from './components/SettingsPageWrapper';
 
 const AssistantSettings: React.FC = () => {

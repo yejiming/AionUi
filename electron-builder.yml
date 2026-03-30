@@ -159,8 +159,8 @@ dmg:
       type: link
       path: /Applications
 
-afterPack: scripts/afterPack.js
-afterSign: scripts/afterSign.js
+afterPack: scripts/release/afterPack.js
+afterSign: scripts/release/afterSign.js
 
 linux:
   target:

@@ -91,10 +91,10 @@ tail -f /tmp/pr-automation.log
 
 ```bash
 # 前台运行
-./scripts/pr-automation.sh
+./scripts/ops/pr-automation.sh
 
 # 后台运行
-nohup ./scripts/pr-automation.sh >> /tmp/pr-automation.log 2>&1 &
+nohup ./scripts/ops/pr-automation.sh >> /tmp/pr-automation.log 2>&1 &
 ```
 
 ### 停止
@@ -125,5 +125,5 @@ LOG_FILE=/var/log/pr-automation.log
 ## 首次部署
 
 1. 确认 `gh auth login` 已完成，有足够权限（PR labels、合并、向外部 fork 推送）
-2. 手动运行一次：`./scripts/pr-automation.sh` 并观察日志
+2. 手动运行一次：`./scripts/ops/pr-automation.sh` 并观察日志
 3. 确认输出 `No eligible PR found this round` 或正常处理一个 PR

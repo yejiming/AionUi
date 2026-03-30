@@ -289,7 +289,7 @@ vi.mock('@/renderer/hooks/mcp', () => ({
   }),
 }));
 
-import ToolsModalContent from '@/renderer/components/settings/SettingsModal/contents/ToolsModalContent';
+import ToolsModalContent from '@/renderer/components/settings/SettingsModal/contents/tools/ToolsModalContent';
 
 describe('ToolsModalContent image generation status refresh', () => {
   beforeEach(() => {

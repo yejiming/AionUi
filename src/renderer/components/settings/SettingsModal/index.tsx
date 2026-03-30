@@ -15,14 +15,16 @@ import { Computer, Earth, Gemini, Info, LinkCloud, Puzzle, Toolkit } from '@icon
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AboutModalContent from './contents/AboutModalContent';
-import AgentModalContent from './contents/AgentModalContent';
-import ExtensionSettingsTabContent from './contents/ExtensionSettingsTabContent';
-import GeminiModalContent from './contents/GeminiModalContent';
-import ModelModalContent from './contents/ModelModalContent';
-import SystemModalContent from './contents/SystemModalContent';
-import ToolsModalContent from './contents/ToolsModalContent';
-import WebuiModalContent from './contents/WebuiModalContent';
+import {
+  AboutModalContent,
+  AgentModalContent,
+  ExtensionSettingsTabContent,
+  GeminiModalContent,
+  ModelModalContent,
+  SystemModalContent,
+  ToolsModalContent,
+  WebuiModalContent,
+} from './contents';
 import { SettingsViewModeProvider } from './settingsViewContext';
 
 // ==================== 常量定义 / Constants ====================
