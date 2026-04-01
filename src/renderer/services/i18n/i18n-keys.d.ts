@@ -839,6 +839,7 @@ export type I18nKey =
   | 'settings.agentManagement.localAgentsDescription'
   | 'settings.agentManagement.localAgentsEmpty'
   | 'settings.agentManagement.localAgentsSetupLink'
+  | 'settings.agentManagement.marketComingSoon'
   | 'settings.agentManagement.remoteAgents'
   | 'settings.agentManagement.remoteAgentsDescription'
   | 'settings.agentManagement.settings'
