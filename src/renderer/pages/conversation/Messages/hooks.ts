@@ -13,6 +13,11 @@ import { createContext } from '@renderer/utils/ui/createContext';
 const [useMessageList, MessageListProvider, useUpdateMessageList] = createContext([] as TMessage[]);
 
 const [useChatKey, ChatKeyProvider] = createContext('');
+const isStreamDebugEnabled = (): boolean => {
+  const globalDebug = (globalThis as { __AION_STREAM_DEBUG__?: unknown }).__AION_STREAM_DEBUG__;
+  const envDebug = typeof process !== 'undefined' && process.env.AION_STREAM_DEBUG === '1';
+  return globalDebug === true || envDebug;
+};
 
 const beforeUpdateMessageListStack: Array<(list: TMessage[]) => TMessage[]> = [];
 
@@ -168,11 +173,22 @@ function composeMessageWithIndex(message: TMessage, list: TMessage[], index: Mes
         }
         // AI streaming messages (left position) — append chunks
         const newList = list.slice();
+        const incomingChunk = message.content.content;
+        const mergedContent = existingMsg.content.content + incomingChunk;
+        if (isStreamDebugEnabled()) {
+          console.debug(
+            '[stream-debug][renderer][merge-text] msg_id=%s prev=%s incoming=%s merged=%s',
+            message.msg_id,
+            JSON.stringify(existingMsg.content.content),
+            JSON.stringify(incomingChunk),
+            JSON.stringify(mergedContent)
+          );
+        }
         newList[existingIdx] = {
           ...existingMsg,
           content: {
             ...existingMsg.content,
-            content: existingMsg.content.content + message.content.content,
+            content: mergedContent,
           },
         };
         return newList;

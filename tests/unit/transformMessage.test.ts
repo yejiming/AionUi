@@ -30,11 +30,29 @@ describe('transformMessage', () => {
     expect(result!.position).toBe('left');
   });
 
+  it('preserves exact whitespace in streamed content chunks', () => {
+    const result = transformMessage(makeMessage('content', ' is'));
+    expect(result).toBeDefined();
+    expect(result!.type).toBe('text');
+    expect(result!.content).toEqual({ content: ' is' });
+  });
+
   it('transforms user_content messages into right-aligned text', () => {
     const result = transformMessage(makeMessage('user_content', 'user msg'));
     expect(result).toBeDefined();
     expect(result!.type).toBe('text');
     expect(result!.position).toBe('right');
+  });
+
+  it('preserves whitespace-only rich content payloads', () => {
+    const result = transformMessage(
+      makeMessage('content', {
+        content: '   ',
+      })
+    );
+    expect(result).toBeDefined();
+    expect(result!.type).toBe('text');
+    expect(result!.content).toEqual({ content: '   ', cronMeta: undefined });
   });
 
   it('returns undefined for transient message types', () => {

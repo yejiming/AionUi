@@ -72,6 +72,34 @@ const MutationProbe = () => {
   );
 };
 
+const StreamingMergeProbe = ({ chunks, msgId = 'stream-msg-1' }: { chunks: string[]; msgId?: string }) => {
+  const addOrUpdateMessage = useAddOrUpdateMessage();
+  const messages = useMessageList();
+
+  return (
+    <div>
+      <button
+        type='button'
+        onClick={() => {
+          for (const [index, chunk] of chunks.entries()) {
+            addOrUpdateMessage({
+              id: `stream-${index}`,
+              msg_id: msgId,
+              conversation_id: 'conv-1',
+              type: 'text',
+              position: 'left',
+              content: { content: chunk },
+            } as TestMessage);
+          }
+        }}
+      >
+        merge-stream
+      </button>
+      <pre data-testid='stream-merged-messages'>{JSON.stringify(messages)}</pre>
+    </div>
+  );
+};
+
 describe('message hooks cache merge', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -143,6 +171,60 @@ describe('message hooks cache merge', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('mutated-messages').textContent).not.toContain('msg-1');
+    });
+  });
+
+  it('merges streaming text chunks and preserves leading spaces', async () => {
+    mockGetConversationMessagesInvoke.mockResolvedValue([]);
+
+    render(
+      <MessageListProvider value={[]}>
+        <StreamingMergeProbe chunks={['this', ' is']} />
+      </MessageListProvider>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'merge-stream' }));
+
+    await waitFor(() => {
+      const parsed = JSON.parse(screen.getByTestId('stream-merged-messages').textContent ?? '[]') as TestMessage[];
+      expect(parsed).toHaveLength(1);
+      expect(parsed[0].content.content).toBe('this is');
+    });
+  });
+
+  it('preserves blank lines when newline-only chunks are merged', async () => {
+    mockGetConversationMessagesInvoke.mockResolvedValue([]);
+
+    render(
+      <MessageListProvider value={[]}>
+        <StreamingMergeProbe chunks={['line1\n', '\nline2']} />
+      </MessageListProvider>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'merge-stream' }));
+
+    await waitFor(() => {
+      const parsed = JSON.parse(screen.getByTestId('stream-merged-messages').textContent ?? '[]') as TestMessage[];
+      expect(parsed).toHaveLength(1);
+      expect(parsed[0].content.content).toBe('line1\n\nline2');
+    });
+  });
+
+  it('preserves whitespace-only chunks when they are streamed', async () => {
+    mockGetConversationMessagesInvoke.mockResolvedValue([]);
+
+    render(
+      <MessageListProvider value={[]}>
+        <StreamingMergeProbe chunks={['hello', '   ', 'world']} />
+      </MessageListProvider>
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'merge-stream' }));
+
+    await waitFor(() => {
+      const parsed = JSON.parse(screen.getByTestId('stream-merged-messages').textContent ?? '[]') as TestMessage[];
+      expect(parsed).toHaveLength(1);
+      expect(parsed[0].content.content).toBe('hello   world');
     });
   });
 });

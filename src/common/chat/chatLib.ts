@@ -21,6 +21,12 @@ import type { AcpBackend, AcpPermissionRequest, PlanUpdate, ToolCallUpdate } fro
 import type { IResponseMessage } from '../adapter/ipcBridge';
 import { uuid } from '../utils';
 
+const isStreamDebugEnabled = (): boolean => {
+  const globalDebug = (globalThis as { __AION_STREAM_DEBUG__?: unknown }).__AION_STREAM_DEBUG__;
+  const envDebug = typeof process !== 'undefined' && process.env.AION_STREAM_DEBUG === '1';
+  return globalDebug === true || envDebug;
+};
+
 /**
  * 安全的路径拼接函数，兼容Windows和Mac
  * @param basePath 基础路径
@@ -382,6 +388,16 @@ export const transformMessage = (message: IResponseMessage): TMessage => {
     case 'user_content': {
       const data = message.data;
       const isRichData = typeof data === 'object' && data !== null && 'content' in data;
+      const normalizedContent = isRichData ? String((data as { content?: unknown }).content ?? '') : String(data ?? '');
+      if (isStreamDebugEnabled()) {
+        console.debug(
+          '[stream-debug][chatLib][transformMessage] type=%s msg_id=%s chunk=%s length=%d',
+          message.type,
+          message.msg_id ?? 'null',
+          JSON.stringify(normalizedContent),
+          normalizedContent.length
+        );
+      }
       return {
         id: uuid(),
         type: 'text',
@@ -390,10 +406,10 @@ export const transformMessage = (message: IResponseMessage): TMessage => {
         conversation_id: message.conversation_id,
         content: isRichData
           ? {
-              content: (data as { content: string; cronMeta?: CronMessageMeta }).content,
+              content: normalizedContent,
               cronMeta: (data as { cronMeta?: CronMessageMeta }).cronMeta,
             }
-          : { content: data as string },
+          : { content: normalizedContent },
       };
     }
     case 'tool_call': {

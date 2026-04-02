@@ -133,8 +133,8 @@ export const processGeminiStreamEvents = async (
               // 提取完整块中的思考内容并作为 thought 事件发送
               const thinkMatches = contentText.matchAll(thinkTagRegex);
               for (const match of thinkMatches) {
-                const thinkContent = match[1]?.trim();
-                if (thinkContent) {
+                const thinkContent = match[1] ?? '';
+                if (thinkContent.length > 0) {
                   onStreamEvent({
                     type: ServerGeminiEventType.Thought,
                     data: thinkContent,
@@ -154,11 +154,9 @@ export const processGeminiStreamEvents = async (
                 .replace(/<think(?:ing)?>([\s\S]*?)<\/think(?:ing)?>/gi, '')
                 // Keep orphaned </think> for frontend accumulated content filtering
                 // Also remove unclosed opening tags at the end
-                .replace(/<think(?:ing)?>[\s\S]*$/gi, '')
-                .replace(/\n{3,}/g, '\n\n')
-                .trim();
+                .replace(/<think(?:ing)?>[\s\S]*$/gi, '');
 
-              if (cleanedContent) {
+              if (cleanedContent.length > 0) {
                 onStreamEvent({ type: event.type, data: cleanedContent });
               }
             } else {

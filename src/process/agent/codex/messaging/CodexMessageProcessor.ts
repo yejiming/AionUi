@@ -14,6 +14,10 @@ import { processCronInMessage } from '@process/task/MessageMiddleware';
 import { cronBusyGuard } from '@process/services/cron/CronBusyGuard';
 import { ipcBridge } from '@/common';
 
+const isStreamDebugEnabled = (): boolean => {
+  return process.env.AION_STREAM_DEBUG === '1';
+};
+
 export class CodexMessageProcessor {
   private currentLoadingId: string | null = null;
   private deltaTimeout: NodeJS.Timeout | null = null;
@@ -85,7 +89,15 @@ export class CodexMessageProcessor {
   }
 
   processMessageDelta(msg: Extract<CodexEventMsg, { type: 'agent_message_delta' }>) {
-    const rawDelta = msg.delta;
+    const rawDelta = typeof msg.delta === 'string' ? msg.delta : String(msg.delta ?? '');
+    if (isStreamDebugEnabled()) {
+      console.debug(
+        '[stream-debug][codex][processMessageDelta] chunk=%s length=%d msg_id=%s',
+        JSON.stringify(rawDelta),
+        rawDelta.length,
+        this.currentLoadingId ?? 'null'
+      );
+    }
     const deltaMessage = {
       type: 'content' as const,
       conversation_id: this.conversation_id,
