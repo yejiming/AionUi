@@ -52,6 +52,14 @@ vi.mock('@uiw/react-codemirror', () => ({
 }));
 
 vi.mock('@codemirror/lang-json', () => ({ json: () => [] }));
+vi.mock('@/renderer/components/chat/EmojiPicker', () => ({
+  default: ({ onChange, children }: { onChange: (emoji: string) => void; children: React.ReactNode }) => {
+    React.useEffect(() => {
+      onChange('😺');
+    }, [onChange]);
+    return <>{children}</>;
+  },
+}));
 
 // ---------------------------------------------------------------------------
 // Imports
@@ -268,5 +276,27 @@ describe('InlineAgentEditor', () => {
     const saved = onSave.mock.calls[0][0] as AcpBackendConfig;
     expect(saved.id).toBe('existing-id');
     expect(saved.enabled).toBe(false);
+  });
+
+  it('saves the latest avatar when only avatar is changed', async () => {
+    const onSave = vi.fn();
+    const agent = makeAgent({
+      name: 'Avatar Agent',
+      defaultCliPath: '/usr/bin/avatar-agent',
+      avatar: '🤖',
+    });
+
+    await act(async () => {
+      render(<InlineAgentEditor agent={agent} onSave={onSave} onCancel={vi.fn()} />);
+    });
+
+    const saveButton = screen.getByRole('button', { name: 'common.save' });
+    await act(async () => {
+      fireEvent.click(saveButton);
+    });
+
+    expect(onSave).toHaveBeenCalledTimes(1);
+    const saved = onSave.mock.calls[0][0] as AcpBackendConfig;
+    expect(saved.avatar).toBe('😺');
   });
 });
